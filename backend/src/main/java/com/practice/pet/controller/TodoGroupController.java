@@ -2,6 +2,7 @@ package com.practice.pet.controller;
 
 import com.practice.pet.dto.Group;
 import com.practice.pet.dto.Todo;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/group")
+@Tag(name = "Group Controller", description = "CRUD эндпоинты для сущности GroupEntity")
 public class TodoGroupController {
     @PostMapping
     public ResponseEntity<Group> createGroup() {

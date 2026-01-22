@@ -5,6 +5,8 @@ import com.practice.pet.dto.EditTodo;
 import com.practice.pet.dto.Todo;
 import com.practice.pet.enums.TodoStatus;
 import com.practice.pet.services.TodoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/todo")
+@Tag(name = "Todo Controller", description = "CRUD эндпоинты для сущности TodoEntity")
 public class TodoController {
     private final TodoService todoService;
 
@@ -23,7 +26,7 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody CreateTodo createTodo) {
+    public ResponseEntity<Todo> createTodo(@RequestBody @Valid CreateTodo createTodo) {
         return ResponseEntity.ok(todoService.createTodo(createTodo));
     }
 
@@ -33,7 +36,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> editTodo(@PathVariable UUID id, @RequestBody EditTodo editTodo) {
+    public ResponseEntity<Todo> editTodo(@PathVariable UUID id, @Valid @RequestBody EditTodo editTodo) {
         return ResponseEntity.ok(todoService.editTodo(id, editTodo));
     }
 

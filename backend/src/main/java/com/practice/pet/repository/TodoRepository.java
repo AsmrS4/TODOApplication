@@ -14,8 +14,8 @@ import java.util.UUID;
 @Repository
 public interface TodoRepository extends JpaRepository<TodoEntity, UUID> {
     Optional<TodoEntity> findTodoById(UUID id);
-    @Query("SELECT * FROM TodoEntity te WHERE te.status <> 3")
+    @Query("SELECT te FROM TodoEntity te WHERE te.status <> 3")
     List<TodoEntity> findActiveTodos();
-    @Query("SELECT * FROM TodoEntity te WHERE te.status <> 3 AND te.group = group")
+    @Query("SELECT te FROM TodoEntity te WHERE te.status <> 3 AND te.group = group")
     List<TodoEntity> findActiveTodosByGroup(@Param("group")GroupEntity group);
 }

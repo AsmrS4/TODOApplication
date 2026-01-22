@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,12 +30,14 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Todo createTodo(CreateTodo createTodo) {
         TodoEntity newTodo = mapper.mapToEntity(createTodo);
+        validateDeadline(createTodo.getDeadlineTime());
         return mapper.mapToTodo(save(newTodo));
     }
 
     @Override
     public Todo editTodo(UUID id, EditTodo editTodo) {
         TodoEntity todoEntity = findEntityById(id);
+        validateDeadline(editTodo.getDeadlineTime());
         mapper.mergeChanges(todoEntity, editTodo);
         return mapper.mapToTodo(save(todoEntity));
     }
@@ -56,6 +59,12 @@ public class TodoServiceImpl implements TodoService {
     public void deleteTodo(UUID id) {
         TodoEntity todoEntity = findEntityById(id);
         todoRepository.delete(todoEntity);
+    }
+
+    private void validateDeadline(LocalDateTime deadline) {
+        if(deadline != null && LocalDateTime.now().isAfter(deadline)) {
+            throw new IllegalArgumentException("Дата дедлайна не может быть раньше текущего дня");
+        }
     }
 
     private TodoEntity save(TodoEntity todoEntity) {
