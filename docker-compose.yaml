@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  backend:
+    image: 'backend-image:latest'
+    container-name: 'backend-app'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://events_db:5444/todos_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    ports:
+      - '8092:8092'
+    networks:
+      - app_network
+    depends_on:
+      - todos_db
+
+  todos_db:
+    image: 'postgres:15'
+    container_name: 'todos_db'
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=events_db
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5444:5444'
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+
+networks:
+  app_network:
+    driver: bridge
