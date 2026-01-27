@@ -33,7 +33,7 @@ public class TodoGroupController {
     public ResponseEntity<List<Todo>> retrieveTodosByGroup(@PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.retrieveTodosByGroup(groupId));
     }
-    @PostMapping("/{groupId}")
+    @PutMapping("/{groupId}")
     public ResponseEntity<Group> editGroup(@PathVariable Long groupId, @RequestBody GroupRequest request) {
         return ResponseEntity.ok(groupService.editGroup(groupId, request));
     }
