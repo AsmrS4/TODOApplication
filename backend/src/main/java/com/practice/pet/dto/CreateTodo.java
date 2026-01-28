@@ -3,6 +3,7 @@ package com.practice.pet.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,8 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class CreateTodo {
     @NotBlank(message = "Описание не должно быть пустым")
-    @Min(value = 3, message = "Минимальная длина описания 3 символа")
-    @Max(value = 255, message = "Максимальная длина описания 255 символов")
+    @Size(min = 3, max = 255, message = "Допустимая длина описания задачи от 3 до 255 символов")
     private String description;
     private LocalDateTime deadlineTime;
     private Long groupId;

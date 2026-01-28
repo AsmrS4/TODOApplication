@@ -1,10 +1,12 @@
 package com.practice.pet.dto;
 
 import com.practice.pet.enums.TodoStatus;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 public class Todo {
     private UUID id;
     private String description;
