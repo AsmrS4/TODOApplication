@@ -20,16 +20,25 @@ public class GlobalHandlerException {
         Map<String, Object> response = createResponse(ex);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
         Map<String, Object> response = createResponse(ex);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(IncorrectDateException.class)
+    public ResponseEntity<?> handleIncorrectDateException(IncorrectDateException ex) {
+        Map<String, Object> response = createResponse(ex);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleServerErrorException(Exception ex) {
         Map<String, Object> response = createResponse(ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -41,6 +50,7 @@ public class GlobalHandlerException {
         response.put("errors", errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
     private Map<String, Object> createResponse(Exception exception) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", exception.getMessage());

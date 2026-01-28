@@ -2,15 +2,18 @@ package com.practice.pet.controller;
 
 import com.practice.pet.dto.CreateTodo;
 import com.practice.pet.dto.EditTodo;
+import com.practice.pet.dto.FilterParams;
 import com.practice.pet.dto.Todo;
 import com.practice.pet.enums.TodoStatus;
 import com.practice.pet.services.TodoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,8 +34,13 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> retrieveTodos() {
-        return ResponseEntity.ok(todoService.retrieveTodos());
+    public ResponseEntity<List<Todo>> retrieveTodos(
+            @RequestParam(required = false) LocalDateTime dateFrom,
+            @RequestParam(required = false) LocalDateTime dateTo,
+            @RequestParam(required = false) TodoStatus status
+            ) {
+        FilterParams filterParams = new FilterParams(dateFrom, dateTo, status);
+        return ResponseEntity.ok(todoService.retrieveTodos(filterParams));
     }
 
     @PutMapping("/{id}")

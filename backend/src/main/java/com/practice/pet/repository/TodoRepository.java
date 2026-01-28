@@ -2,6 +2,7 @@ package com.practice.pet.repository;
 
 import com.practice.pet.entities.GroupEntity;
 import com.practice.pet.entities.TodoEntity;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,5 @@ public interface TodoRepository extends JpaRepository<TodoEntity, UUID> {
     List<TodoEntity> findActiveTodos();
     @Query("SELECT te FROM TodoEntity te WHERE te.status <> 3 AND te.group = group")
     List<TodoEntity> findActiveTodosByGroup(@Param("group")GroupEntity group);
+    List<TodoEntity> findAll(Specification specification);
 }
