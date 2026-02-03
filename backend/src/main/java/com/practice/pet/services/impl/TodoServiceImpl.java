@@ -3,7 +3,6 @@ package com.practice.pet.services.impl;
 import com.practice.pet.dto.CreateTodo;
 import com.practice.pet.dto.EditTodo;
 import com.practice.pet.dto.FilterParams;
-import com.practice.pet.dto.Todo;
 import com.practice.pet.entities.TodoEntity;
 import com.practice.pet.enums.TodoStatus;
 import com.practice.pet.exceptions.IncorrectDateException;
@@ -12,7 +11,7 @@ import com.practice.pet.services.TodoService;
 import com.practice.pet.utils.FilterSpecification;
 import com.practice.pet.utils.TodoMapper;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -21,44 +20,38 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
     private final TodoMapper mapper;
 
-    @Autowired
-    public TodoServiceImpl(TodoRepository todoRepository, TodoMapper todoMapper) {
-        this.todoRepository = todoRepository;
-        this.mapper = todoMapper;
-    }
-
     @Override
-    public Todo createTodo(CreateTodo createTodo) {
-        TodoEntity newTodo = mapper.mapToEntity(createTodo);
+    public TodoEntity createTodo(CreateTodo createTodo) {
         validateDeadline(createTodo.getDeadlineTime());
-        return mapper.mapToTodo(save(newTodo));
+        TodoEntity newTodo = mapper.mapToEntity(createTodo);
+        return save(newTodo);
     }
 
     @Override
-    public Todo editTodo(UUID id, EditTodo editTodo) {
-        TodoEntity todoEntity = findEntityById(id);
+    public TodoEntity editTodo(UUID id, EditTodo editTodo) {
         validateDeadline(editTodo.getDeadlineTime());
+        TodoEntity todoEntity = findEntityById(id);
         mapper.mergeChanges(todoEntity, editTodo);
-        return mapper.mapToTodo(save(todoEntity));
+        return save(todoEntity);
     }
 
     @Override
-    public List<Todo> retrieveTodos(FilterParams filterParams) {
+    public List<TodoEntity> retrieveTodos(FilterParams filterParams) {
         validateFilterParams(filterParams);
         Specification<TodoEntity> filterSpecification = FilterSpecification.configureFilters(filterParams);
-        List<TodoEntity> todos = todoRepository.findAll(filterSpecification);
-        return todos.stream().map(mapper::mapToTodo).toList();
+        return todoRepository.findAll(filterSpecification);
     }
 
     @Override
-    public Todo changeStatus(UUID id, TodoStatus status) {
+    public TodoEntity changeStatus(UUID id, TodoStatus status) {
         TodoEntity todoEntity = findEntityById(id);
         todoEntity.setStatus(status);
-        return mapper.mapToTodo(save(todoEntity));
+        return save(todoEntity);
     }
 
     @Override

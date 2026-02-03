@@ -1,15 +1,15 @@
 package com.practice.pet.services;
 
-import com.practice.pet.dto.Group;
 import com.practice.pet.dto.GroupRequest;
-import com.practice.pet.dto.Todo;
+import com.practice.pet.entities.GroupEntity;
+import com.practice.pet.entities.TodoEntity;
 
 import java.util.List;
 
 public interface GroupService {
-    Group createGroup(GroupRequest request);
-    List<Group> retrieveGroups();
-    List<Todo> retrieveTodosByGroup(Long groupId);
-    Group editGroup(Long id, GroupRequest request);
+    GroupEntity createGroup(GroupRequest request);
+    List<GroupEntity > retrieveGroups();
+    List<TodoEntity> retrieveTodosByGroup(Long groupId);
+    GroupEntity editGroup(Long id, GroupRequest request);
     void deleteGroup(Long id);
 }

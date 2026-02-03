@@ -1,8 +1,6 @@
 package com.practice.pet.services.impl;
 
-import com.practice.pet.dto.Group;
 import com.practice.pet.dto.GroupRequest;
-import com.practice.pet.dto.Todo;
 import com.practice.pet.entities.GroupEntity;
 import com.practice.pet.entities.TodoEntity;
 import com.practice.pet.repository.GroupRepository;
@@ -11,54 +9,44 @@ import com.practice.pet.services.GroupService;
 import com.practice.pet.utils.GroupMapper;
 import com.practice.pet.utils.TodoMapper;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
     private final TodoRepository todoRepository;
     private final TodoMapper todoMapper;
     private final GroupMapper groupMapper;
 
-    public GroupServiceImpl(
-            GroupRepository groupRepository,
-            TodoRepository todoRepository,
-            TodoMapper mapper,
-            GroupMapper groupMapper
-    ) {
-        this.groupRepository = groupRepository;
-        this.todoRepository = todoRepository;
-        this.todoMapper = mapper;
-        this.groupMapper = groupMapper;
-    }
+
     @Override
-    public Group createGroup(GroupRequest request) {
+    public GroupEntity createGroup(GroupRequest request) {
         validateGroupName(request.getGroupName());
         GroupEntity newGroup = groupMapper.mapToEntity(request);
-        return groupMapper.mapToGroup(save(newGroup));
+        return save(newGroup);
     }
 
     @Override
-    public List<Group> retrieveGroups() {
-        List<GroupEntity> groups = groupRepository.findAll();
-        return groups.stream().map(groupMapper::mapToGroup).toList();
+    public List<GroupEntity> retrieveGroups() {
+        return groupRepository.findAll();
     }
 
     @Override
-    public List<Todo> retrieveTodosByGroup(Long groupId) {
+    public List<TodoEntity> retrieveTodosByGroup(Long groupId) {
         GroupEntity group = findEntityById(groupId);
-        List<TodoEntity> todos = todoRepository.findActiveTodosByGroup(group);
-        return todos.stream().map(todoMapper::mapToTodo).toList();
+        return todoRepository.findActiveTodosByGroup(group);
     }
 
     @Override
-    public Group editGroup(Long id, GroupRequest request) {
+    public GroupEntity editGroup(Long id, GroupRequest request) {
         validateGroupName(request.getGroupName());
         GroupEntity group = findEntityById(id);
         group.setGroupName(request.getGroupName());
-        return groupMapper.mapToGroup(save(group));
+        return save(group);
     }
 
     @Override

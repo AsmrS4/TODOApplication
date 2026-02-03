@@ -2,9 +2,11 @@ package com.practice.pet.utils;
 
 import com.practice.pet.dto.FilterParams;
 import com.practice.pet.entities.TodoEntity;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
 
+@UtilityClass
 public class FilterSpecification {
     public static Specification<TodoEntity> configureFilters(FilterParams params) {
         Specification<TodoEntity> specification = (root, query, cb) -> null;
